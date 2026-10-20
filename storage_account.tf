@@ -54,7 +54,7 @@ resource "azurerm_storage_management_policy" "backend" {
       # (14 + 180 -- minimalny okres przechowywania w Archive, bez opłaty za wcześniejsze usunięcie)
       version {
         tier_to_cold_after_days_since_creation_greater_than = 0
-        change_tier_to_archive_after_days_since_creation    = 14
+        #change_tier_to_archive_after_days_since_creation    = 14
         delete_after_days_since_creation                    = 194
       }
     }
@@ -70,11 +70,11 @@ resource "azurerm_storage_container" "backend" {
 
 # RBAC - uprawnienia do Storage Account dla remote backend
 # RBAC - uprawnienia do Storage Account dla remote backend
-# resource "azurerm_role_assignment" "storage_blob_data_contributor" {
-#   scope                = azurerm_storage_account.backend.id
-#   role_definition_name = "Storage Blob Data Contributor"
-#   principal_id         = data.azurerm_client_config.current.object_id
-# }
+resource "azurerm_role_assignment" "storage_blob_data_contributor" {
+  scope                = azurerm_storage_account.backend.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
 
 # RBAC - uprawnienia dla Service Principal (jeśli używany)
 # resource "azurerm_role_assignment" "storage_blob_data_contributor_sp" {
